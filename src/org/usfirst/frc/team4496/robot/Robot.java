@@ -1,9 +1,11 @@
 package org.usfirst.frc.team4496.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
@@ -26,6 +28,8 @@ public class Robot extends IterativeRobot {
 	//start of added code
 	RobotDrive myDrive;
 	Talon liftDrive;
+	Compressor compressor;
+	Solenoid grabArm;
 
     Command autonomousCommand;
 
@@ -40,7 +44,8 @@ public class Robot extends IterativeRobot {
         
         myDrive = new RobotDrive(RobotMap.leftFrontMotor, RobotMap.leftRearMotor, RobotMap.rightFrontMotor, RobotMap.rightFrontMotor);
         liftDrive = new Talon(RobotMap.mainLiftMotor);
-        
+        compressor = new Compressor(RobotMap.compressor);
+        grabArm = new Solenoid(RobotMap.solenoid);
     }
 	
 	public void disabledPeriodic() {
@@ -92,6 +97,14 @@ public class Robot extends IterativeRobot {
         } else {
         	liftDrive.set(0);
         }
+        
+        //main grab setup
+        if(OI.controller.getZ() > 0.5){
+        	grabArm.set(true);
+        } else if(OI.controller.getZ() < 0.5){
+        	grabArm.set(false);
+        }
+        
     }
     
     /**
