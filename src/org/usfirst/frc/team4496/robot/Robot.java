@@ -44,8 +44,8 @@ public class Robot extends IterativeRobot {
         
         myDrive = new RobotDrive(RobotMap.leftFrontMotor, RobotMap.leftRearMotor, RobotMap.rightFrontMotor, RobotMap.rightFrontMotor);
         liftDrive = new Talon(RobotMap.mainLiftMotor);
-        compressor = new Compressor(RobotMap.compressor);
-        grabArm = new Solenoid(RobotMap.solenoid);
+        //compressor = new Compressor(RobotMap.compressor);
+        //grabArm = new Solenoid(RobotMap.solenoid);
     }
 	
 	public void disabledPeriodic() {
@@ -89,6 +89,8 @@ public class Robot extends IterativeRobot {
         //main drive setup
         myDrive.mecanumDrive_Cartesian(OI.controller.getY(), OI.controller.getX(), OI.controller.getTwist(), 0);
         
+        
+        /*
         //main lift system stuff
         if(OI.buttonLeftBumper.get()){
         	liftDrive.set(1);
@@ -104,6 +106,7 @@ public class Robot extends IterativeRobot {
         } else if(OI.controller.getZ() < 0.5){
         	grabArm.set(false);
         }
+        */
         
     }
     
