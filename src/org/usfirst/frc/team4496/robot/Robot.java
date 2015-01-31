@@ -1,10 +1,13 @@
-
 package org.usfirst.frc.team4496.robot;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+
 import org.usfirst.frc.team4496.robot.commands.ExampleCommand;
 import org.usfirst.frc.team4496.robot.subsystems.ExampleSubsystem;
 
@@ -19,6 +22,10 @@ public class Robot extends IterativeRobot {
 
 	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
+	
+	//start of added code
+	RobotDrive myDrive;
+	Talon liftDrive;
 
     Command autonomousCommand;
 
@@ -30,6 +37,10 @@ public class Robot extends IterativeRobot {
 		oi = new OI();
         // instantiate the command used for the autonomous period
         autonomousCommand = new ExampleCommand();
+        
+        myDrive = new RobotDrive(RobotMap.leftFrontMotor, RobotMap.leftRearMotor, RobotMap.rightFrontMotor, RobotMap.rightFrontMotor);
+        liftDrive = new Talon(RobotMap.mainLiftMotor);
+        
     }
 	
 	public void disabledPeriodic() {
@@ -69,6 +80,18 @@ public class Robot extends IterativeRobot {
      */
     public void teleopPeriodic() {
         Scheduler.getInstance().run();
+        
+        //main drive setup
+        myDrive.mecanumDrive_Cartesian(OI.controller.getY(), OI.controller.getX(), OI.controller.getTwist(), 0);
+        
+        //main lift system stuff
+        if(OI.buttonLeftBumper.get()){
+        	liftDrive.set(1);
+        } else if(OI.buttonRightBumper.get()){
+        	liftDrive.set(-1);
+        } else {
+        	liftDrive.set(0);
+        }
     }
     
     /**
