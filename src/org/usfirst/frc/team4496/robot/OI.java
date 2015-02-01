@@ -24,8 +24,8 @@ public class OI {
 			buttonRightBumper = new JoystickButton(controller, 6),
 			buttonSelect = new JoystickButton(controller, 7),
 			buttonStart = new JoystickButton(controller, 8),
-			buttonLeftTrigger = new JoystickButton(controller, 9),
-			buttonRightTrigger = new JoystickButton(controller, 10);
+			buttonLeftJoystick = new JoystickButton(controller, 9),
+			buttonRightJoystick = new JoystickButton(controller, 10);
     // There are a few additional built in buttons you can use. Additionally,
     // by subclassing Button you can create custom triggers and bind those to
     // commands the same as any other Button.

@@ -1,16 +1,22 @@
 package org.usfirst.frc.team4496.robot;
+//import edu.wpi.first.wpilibj.Compressor;
+import java.text.DecimalFormat;
 
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.Timer;
+//import edu.wpi.first.wpilibj.Solenoid;
+//import edu.wpi.first.wpilibj.Talon;
+//import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team4496.robot.commands.ExampleCommand;
+
+
+
+
+//import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import org.usfirst.frc.team4496.robot.commands.TestCommand;
 import org.usfirst.frc.team4496.robot.subsystems.ExampleSubsystem;
 
 /**
@@ -26,26 +32,30 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	
 	//start of added code
-	RobotDrive myDrive;
-	Talon liftDrive;
-	Compressor compressor;
-	Solenoid grabArm;
-
-    Command autonomousCommand;
+	RobotDrive mainDrive;
+	//Talon liftDrive;
+	//Compressor compressor;
+	//Solenoid grabArm;
+    Command testCommand;
 
     /**
-     * This function is run when the robot is first started up and should be
+     * This function is run when the robot is first started up and should be\
+     *
      * used for any initialization code.
      */
     public void robotInit() {
 		oi = new OI();
         // instantiate the command used for the autonomous period
-        autonomousCommand = new ExampleCommand();
+        testCommand = new TestCommand();
         
-        myDrive = new RobotDrive(RobotMap.leftFrontMotor, RobotMap.leftRearMotor, RobotMap.rightFrontMotor, RobotMap.rightFrontMotor);
-        liftDrive = new Talon(RobotMap.mainLiftMotor);
+        //mainDrive = new RobotDrive(RobotMap.leftFrontMotor, RobotMap.leftRearMotor, RobotMap.rightFrontMotor, RobotMap.rightFrontMotor);
+        mainDrive = new RobotDrive(0, 1, 2, 3);
+        mainDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
+        mainDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
+        //liftDrive = new Talon(RobotMap.mainLiftMotor);
         //compressor = new Compressor(RobotMap.compressor);
         //grabArm = new Solenoid(RobotMap.solenoid);
+        
     }
 	
 	public void disabledPeriodic() {
@@ -53,8 +63,6 @@ public class Robot extends IterativeRobot {
 	}
 
     public void autonomousInit() {
-        // schedule the autonomous command (example)
-        if (autonomousCommand != null) autonomousCommand.start();
     }
 
     /**
@@ -62,6 +70,7 @@ public class Robot extends IterativeRobot {
      */
     public void autonomousPeriodic() {
         Scheduler.getInstance().run();
+        
     }
 
     public void teleopInit() {
@@ -69,7 +78,6 @@ public class Robot extends IterativeRobot {
         // teleop starts running. If you want the autonomous to 
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        if (autonomousCommand != null) autonomousCommand.cancel();
     }
 
     /**
@@ -83,11 +91,28 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during operator control
      */
-    public void teleopPeriodic() {
+	public void teleopPeriodic() {
         Scheduler.getInstance().run();
         
         //main drive setup
-        myDrive.mecanumDrive_Cartesian(OI.controller.getY(), OI.controller.getX(), OI.controller.getTwist(), 0);
+        
+        //set the input values
+        double lXVal = OI.controller.getRawAxis(0);
+        double lYVal = OI.controller.getRawAxis(1);
+        double rXVal = OI.controller.getRawAxis(4);
+        
+        //round the values
+        lXVal = ((double)((int)(lXVal  * 10)) ) / 10;
+        lYVal = ((double)((int)(lYVal  * 10)) ) / 10;
+        rXVal = ((double)((int)(rXVal  * 10)) ) / 10;
+        
+        //output the values
+        SmartDashboard.putDouble("LeftStickXValue", lXVal);
+        SmartDashboard.putDouble("LeftStickYValue", lYVal);
+        SmartDashboard.putDouble("RightStickXValue", rXVal);
+        
+        //drive with the values
+        mainDrive.mecanumDrive_Cartesian(lXVal, lYVal, rXVal, 0);
         
         
         /*
@@ -113,7 +138,7 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during test mode
      */
-    public void testPeriodic() {
-        LiveWindow.run();
+    public void testPeriodic(){
+    	testCommand.start();
     }
 }
