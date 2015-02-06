@@ -1,7 +1,4 @@
 package org.usfirst.frc.team4496.robot;
-//import edu.wpi.first.wpilibj.Compressor;
-import java.text.DecimalFormat;
-
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Talon;
@@ -15,9 +12,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 
+
 //import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import org.usfirst.frc.team4496.robot.commands.TestCommand;
-import org.usfirst.frc.team4496.robot.subsystems.ExampleSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,7 +24,6 @@ import org.usfirst.frc.team4496.robot.subsystems.ExampleSubsystem;
  */
 public class Robot extends IterativeRobot {
 
-	public static final ExampleSubsystem exampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 	
 	//start of added code
@@ -46,7 +41,6 @@ public class Robot extends IterativeRobot {
     public void robotInit() {
 		oi = new OI();
         // instantiate the command used for the autonomous period
-        testCommand = new TestCommand();
         
         //mainDrive = new RobotDrive(RobotMap.leftFrontMotor, RobotMap.leftRearMotor, RobotMap.rightFrontMotor, RobotMap.rightFrontMotor);
         mainDrive = new RobotDrive(0, 1, 2, 3);
@@ -91,6 +85,7 @@ public class Robot extends IterativeRobot {
     /**
      * This function is called periodically during operator control
      */
+	@SuppressWarnings("deprecation")
 	public void teleopPeriodic() {
         Scheduler.getInstance().run();
         
@@ -115,8 +110,7 @@ public class Robot extends IterativeRobot {
         //drive with the values
         mainDrive.mecanumDrive_Cartesian(lXVal, lYVal, rXVal, 0);
         
-        
-        
+   
         //main lift system stuff
         if(OI.controller.getPOV() == 0){
         	liftDrive.set(1);
