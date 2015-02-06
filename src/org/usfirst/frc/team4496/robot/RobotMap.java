@@ -16,7 +16,7 @@ public class RobotMap {
 			leftRearMotor = 1,
 			rightFrontMotor = 2,
 			rightRearMotor = 3;
-    //public static int mainLiftMotor = 4;
+    public static int mainLiftMotor = 4;
     
     //pneumatics
 

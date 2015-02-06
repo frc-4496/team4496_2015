@@ -4,12 +4,12 @@ import java.text.DecimalFormat;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.RobotDrive;
-//import edu.wpi.first.wpilibj.Solenoid;
-//import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.Talon;
 //import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 
 
 
@@ -33,7 +33,7 @@ public class Robot extends IterativeRobot {
 	
 	//start of added code
 	RobotDrive mainDrive;
-	//Talon liftDrive;
+	Talon liftDrive;
 	//Compressor compressor;
 	//Solenoid grabArm;
     Command testCommand;
@@ -52,7 +52,7 @@ public class Robot extends IterativeRobot {
         mainDrive = new RobotDrive(0, 1, 2, 3);
         mainDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         mainDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
-        //liftDrive = new Talon(RobotMap.mainLiftMotor);
+        liftDrive = new Talon(RobotMap.mainLiftMotor);
         //compressor = new Compressor(RobotMap.compressor);
         //grabArm = new Solenoid(RobotMap.solenoid);
         
@@ -110,25 +110,27 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putDouble("LeftStickXValue", lXVal);
         SmartDashboard.putDouble("LeftStickYValue", lYVal);
         SmartDashboard.putDouble("RightStickXValue", rXVal);
+        SmartDashboard.putInt("POVPad", OI.controller.getPOV());
         
         //drive with the values
         mainDrive.mecanumDrive_Cartesian(lXVal, lYVal, rXVal, 0);
         
         
-        /*
+        
         //main lift system stuff
-        if(OI.buttonLeftBumper.get()){
+        if(OI.controller.getPOV() == 0){
         	liftDrive.set(1);
-        } else if(OI.buttonRightBumper.get()){
+        } else if(OI.controller.getPOV() == 180){
         	liftDrive.set(-1);
         } else {
         	liftDrive.set(0);
         }
         
+        /*
         //main grab setup
-        if(OI.controller.getZ() > 0.5){
+        if(OI.controller.getRawAxis(2) > .1{
         	grabArm.set(true);
-        } else if(OI.controller.getZ() < 0.5){
+        } else if(OI.controller.getRawAxis(3) < .1){
         	grabArm.set(false);
         }
         */
