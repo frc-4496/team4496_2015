@@ -6,12 +6,7 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-
-
-
-
-
+import edu.wpi.first.wpilibj.DigitalInput;
 
 //import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 
@@ -27,10 +22,9 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	
 	//start of added code
-	RobotDrive mainDrive;
+	RobotDrive mainDrive, testDrive;
 	Talon liftDrive;
-	//Compressor compressor;
-	//Solenoid grabArm;
+	DigitalInput upperSwitch, lowerSwitch;
     Command testCommand;
 
     /**
@@ -47,8 +41,8 @@ public class Robot extends IterativeRobot {
         mainDrive.setInvertedMotor(RobotDrive.MotorType.kFrontRight, true);
         mainDrive.setInvertedMotor(RobotDrive.MotorType.kRearRight, true);
         liftDrive = new Talon(RobotMap.mainLiftMotor);
-        //compressor = new Compressor(RobotMap.compressor);
-        //grabArm = new Solenoid(RobotMap.solenoid);
+        upperSwitch = new DigitalInput(0);
+        lowerSwitch = new DigitalInput(1);
         
     }
 	
@@ -106,28 +100,21 @@ public class Robot extends IterativeRobot {
         SmartDashboard.putDouble("LeftStickYValue", lYVal);
         SmartDashboard.putDouble("RightStickXValue", rXVal);
         SmartDashboard.putInt("POVPad", OI.controller.getPOV());
+        SmartDashboard.putBoolean("Upper Switch", upperSwitch.get());
+        SmartDashboard.putBoolean("Lower Switch", lowerSwitch.get());
+        
         
         //drive with the values
         mainDrive.mecanumDrive_Cartesian(lXVal, lYVal, rXVal, 0);
         
-   
         //main lift system stuff
-        if(OI.controller.getPOV() == 0){
+        if((OI.controller.getPOV() == 0) && !(upperSwitch.get())){
         	liftDrive.set(1);
-        } else if(OI.controller.getPOV() == 180){
+        } else if((OI.controller.getPOV() == 180) && !(lowerSwitch.get())){
         	liftDrive.set(-1);
         } else {
         	liftDrive.set(0);
         }
-        
-        /*
-        //main grab setup
-        if(OI.controller.getRawAxis(2) > .1{
-        	grabArm.set(true);
-        } else if(OI.controller.getRawAxis(3) < .1){
-        	grabArm.set(false);
-        }
-        */
         
     }
     
@@ -135,6 +122,5 @@ public class Robot extends IterativeRobot {
      * This function is called periodically during test mode
      */
     public void testPeriodic(){
-    	testCommand.start();
     }
 }
